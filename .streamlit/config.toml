@@ -1,0 +1,11 @@
+[theme] # This line is necessary
+
+primaryColor = '#FF8C02' # Bright Orange
+
+backgroundColor = '#33FF64' # Light Green
+
+secondaryBackgroundColor = '#55B2FF' # Lighter Blue
+
+textColor = '#FFFFFF' # White
+
+font = "serif"
