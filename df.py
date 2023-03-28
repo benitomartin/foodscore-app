@@ -11,3 +11,14 @@ def get_df(df: str):
 
 
     return data_df
+
+
+def list(df: list):
+
+    list = []
+
+    data_df = pd.DataFrame(data)
+
+
+
+    return data_df

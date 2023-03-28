@@ -18,10 +18,24 @@ st.set_page_config(page_title="FoodScore", page_icon=":food:", layout="wide")
 
 # For testing purpose. Must be change once API is ready
 model = load_model("model_weights/model_vgg16_cl.h5", compile = False)
-#response = requests.get(uploaded_file, params = params).json()
+# response = requests.get(uploaded_file, params = params).json()
 # st.image(model.predict(uploaded_file))
 
-pd.options.display.float_format = '${:,.2f}'.format
+
+# Nutrition Dataset Upload
+nutr_df = get_df("nutrition101.csv")
+subset = ['protein', 'calcium', 'fat', 'carbohydrates', 'vitamins']
+
+# Funciton for styling the Nutrition Dataset
+def make_pretty(styler):
+
+                styler.highlight_max(axis=0, color="#EA5432", subset=subset)
+                styler.highlight_min(axis=0, color="#72C01F", subset=subset)
+                styler.format(formatter="{:.2f}", subset=subset)
+
+
+                return styler
+
 
 ### DEFINE PAGE CONTAINERS
 
@@ -124,50 +138,32 @@ with st.container():
 
 
         with col3:
-            st.write('<p style="font-size:26px; color:white;">Your label has been selected as Rice</p>',unsafe_allow_html=True)
+            st.write('<p style="font-size:26px; color:white;">Your food has been categorized as Rice</p>',unsafe_allow_html=True)
 
             # Testing model weights
-            image_pred = load_img("test_fotos/1.jpg", target_size=(224, 224))
+            image_pred = load_img(uploaded_file, target_size=(224, 224))
             image_pred = img_to_array(image_pred) / 255.0
             image_pred_exp = np.expand_dims(image_pred, axis=0)
 
             labelPreds = model.predict(image_pred_exp)
+            st.write(labelPreds)
             st.write(f'The label highest probability is: {labelPreds[0][0]:.3f}')
             st.write(f'The label highest probability is: {labelPreds[0][1]:.3f}')
 
         # Option whole dataset below one image
         with col4:
 
-            def make_pretty(styler):
-
-                styler.highlight_max(axis=0, color="#EA5432")
-                styler.highlight_min(axis=0, color="#72C01F")
-                styler.format(formatter="{:.2f}", subset=subset)
-
-
-                return styler
-
             # Show a Table with the nutrition facts. To be fine tuned
-            nutr_df = get_df("nutrition101.csv")
-
-            subset = ['protein', 'calcium', 'fat', 'carbohydrates', 'vitamins']
-            st.dataframe(nutr_df.style.pipe(make_pretty), use_container_width=True)
             st.write('<p style="font-size:26px; color:white;">Here you can find your nutrition Data (min/max)</p>', unsafe_allow_html=True)
+            st.dataframe(nutr_df.style.pipe(make_pretty), use_container_width=True)
+
 
 
 # Option whole dataset below both images
-def make_pretty(styler):
+st.write(nutr_df['name'][0])
 
-                styler.highlight_max(axis=0, color="#EA5432")
-                styler.highlight_min(axis=0, color="#72C01F")
-                styler.format(formatter="{:.2f}", subset=subset)
-
-
-                return styler
 
 st.write('<p style="font-size:26px; color:white;">Here you can find your nutrition Data (min/max)</p>', unsafe_allow_html=True)
-nutr_df = get_df("nutrition101.csv")
-subset = ['protein', 'calcium', 'fat', 'carbohydrates', 'vitamins']
 st.dataframe(nutr_df.style.pipe(make_pretty).format(formatter="{:.2f}", subset=subset), use_container_width=True)
 
 
