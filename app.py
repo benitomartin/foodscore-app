@@ -6,16 +6,7 @@ import plotly.express as px
 from streamlit_cropper import st_cropper
 
 
-
-
 st.set_page_config(page_title="FoodScore", page_icon=":food:", layout="wide")
-
-# For testing purpose. Must be change once API is ready
-# model = load_model("model_weights/model_vgg16_cl.h5", compile = False)
-# response = requests.get(uploaded_file, params = params).json()
-# st.image(model.predict(uploaded_file))
-
-
 
 
 # Funciton for styling the Nutrition Dataset
@@ -93,47 +84,62 @@ with st.container():
 
         #col1, col2 = st.columns([1,1])
 
-        st.image(uploaded_file)
+        url = "https://foodscore-j5kdnfjkoa-ew.a.run.app/upload_image"
+
+        url = "http://localhost:8000/upload_image"
+
+        #dict_food = requests.post(url,files={'img':open('test_fotos/1.jpg','rb')}).json()
+        dict_food = requests.post(url,files={'img':uploaded_file.getvalue()}).json()
 
 
 #with col1:
-        st.markdown("---")
 
-        # Upload an image and set some options for demo purposes
-        # st.header("Cropper Demo")
 
-        # realtime_update = st.sidebar.checkbox(label="Update in Real Time", value=True)
-        # box_color = st.sidebar.color_picker(label="Box Color", value='#0000FF')
-        # aspect_choice = st.sidebar.radio(label="Aspect Ratio", options=["1:1", "16:9", "4:3", "2:3", "Free"])
-        # aspect_dict = {
-        #     "1:1": (1, 1),
-        #     "16:9": (16, 9),
-        #     "4:3": (4, 3),
-        #     "2:3": (2, 3),
-        #     "Free": None
-        # }
-        # aspect_ratio = aspect_dict[aspect_choice]
 
-        # if uploaded_file:
-        #     img = Image.open(uploaded_file)
-        #     fig = px.imshow(img)
-        #     fig.update_layout(width=500, height=600, margin=dict(l=1, r=1, b=1, t=1))
-        #     fig.update_layout(hovermode=False)
-        #     fig.update_xaxes(showticklabels=False)
-        #     fig.update_yaxes(showticklabels=False)
-        #     st.plotly_chart(fig, use_container_width=True)
+        realtime_update = st.checkbox(label="Update in Real Time", value=True)
+        aspect_choice = st.radio(label="Aspect Ratio", options=["1:1", "16:9", "4:3", "2:3", "Free"])
+        aspect_dict = {
+            "1:1": (1, 1),
+             "16:9": (16, 9),
+             "4:3": (4, 3),
+             "2:3": (2, 3),
+             "Free": None
+         }
 
-        #     if not realtime_update:
-        #         st.write("Double click to save crop")
+        aspect_ratio = aspect_dict[aspect_choice]
 
-        #     # Get a cropped image from the frontend
-        #     cropped_img = st_cropper(img, realtime_update=realtime_update, box_color=box_color,
-        #                                 aspect_ratio=aspect_ratio)
+        if uploaded_file:
+            img = Image.open(uploaded_file)
 
-        #     # Manipulate cropped image at will
-        #     st.write("Preview")
-        #     _ = cropped_img.thumbnail((300,300))
-        #     st.image(cropped_img)
+            # fig = px.imshow(img)
+            # fig.update_layout(width=500, height=600, margin=dict(l=1, r=1, b=1, t=1))
+            # fig.update_layout(hovermode=False)
+            # fig.update_xaxes(showticklabels=False)
+            # fig.update_yaxes(showticklabels=False)
+            # st.plotly_chart(img, use_container_width=True)
+
+            if not realtime_update:
+
+                st.write("Double click to save crop")
+
+            #     Get a cropped image from the frontend
+            cropped_img = st_cropper(img, realtime_update=realtime_update,
+                                            aspect_ratio=aspect_ratio)
+
+
+                # Manipulate cropped image at will
+            st.write("Preview")
+            _ = cropped_img.thumbnail((600,600))
+            st.image(cropped_img)
+
+
+
+            # crop_food = requests.post(url,files={'img':cropped_img.getvalue()}).json()
+
+            # st.write(f"Is it {crop_food['name']['0']}?")
+
+            # st.write(f"Or is it {crop_food['name']['1']}, {crop_food['name']['2']},{crop_food['name']['3']} or {crop_food['name']['4']}?")
+
 
 
         # image = Image.open(uploaded_file)
@@ -155,26 +161,17 @@ with st.container():
         #dict_food = requests.post(url,files={'img':open('test_fotos/1.jpg','rb')}).json()
 
 
-
         dict_food = requests.post(url,files={'img':uploaded_file.getvalue()}).json()
-
-
 
 
         st.write(f"Is it {dict_food['name']['0']}?")
 
         st.write(f"Or is it {dict_food['name']['1']}, {dict_food['name']['2']},{dict_food['name']['3']} or {dict_food['name']['4']}?")
 
-
-
             #st.write(f"Your food has been categorized as {dict_food['name']['0']}")
 
 
-
             #st.write('<p style="font-size:26px; color:white;">Your food has been categorized as Rice</p>',unsafe_allow_html=True)
-
-
-
 
             # st.dataframe(df)
 
@@ -224,14 +221,11 @@ with st.container():
 # Option whole dataset below both images
 # st.write(nutr_df['name'][0])
 
+with st.container():
+    if uploaded_file is not None:
+        st.write('<p style="font-size:26px; color:red;">Here you can find your nutrition Data (min/max)</p>', unsafe_allow_html=True)
 
-st.write('<p style="font-size:26px; color:white;">Here you can find your nutrition Data (min/max)</p>', unsafe_allow_html=True)
-
-
-st.dataframe(dict_food)
-
-
-
+        st.dataframe(dict_food)
 
 
 # Remove the Menu Button and Streamlit Icon

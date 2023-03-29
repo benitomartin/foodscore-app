@@ -4,11 +4,11 @@
 primaryColor = '#FF8C02' # Bright Orange
 
 # Background color of the main content area
-backgroundColor = '#333E36' # Dark
+backgroundColor = '#FFFFFF' # White
 
 # Second background color for added contrast
-secondaryBackgroundColor = '#2B74C1' # Dark Blue
+secondaryBackgroundColor = '#95F5DE' # Dark Blue
 
-textColor = '#FFFFFF' # White
+textColor = '#333E36' # Dark
 
 font = "serif"
