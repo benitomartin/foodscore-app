@@ -47,7 +47,7 @@ with st.container():
 
     st.markdown('<p class="big-font">FoodScore</p>', unsafe_allow_html=True)
     st.write(
-        f'<p style="font-size:35px; color:"#959EC6";">Do you really know what you are eating?</p>',
+        f'<p style="text-align: center;font-size:35px; color:"#959EC6";">Do you really know what you are eating?</p>',
         unsafe_allow_html=True,
     )
 
@@ -61,24 +61,24 @@ def load_lottieurl(url):
 
 
 with st.container():
-    left_lottie, right_lottie = st.columns(2)
-    with left_lottie:
+    #left_lottie, right_lottie = st.columns(2)
+    #with left_lottie:
         # st.header("FoodScore")
 
-        lottie1 = load_lottieurl(
-            "https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json"
-        )
-        st_lottie(lottie1, speed=0.8, height=250)
+    #    lottie1 = load_lottieurl(
+    #        "https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json"
+    #    )
+    #    st_lottie(lottie1, speed=0.8, height=250)
 
-    with right_lottie:
-        lottie2 = load_lottieurl(
-            "https://assets5.lottiefiles.com/packages/lf20_tll0j4bb.json"
-        )
-        st_lottie(lottie2, speed=0.8, height=300)
+    #with right_lottie:
+    lottie2 = load_lottieurl(
+        "https://assets5.lottiefiles.com/packages/lf20_tll0j4bb.json"
+    )
+    st_lottie(lottie2, speed=0.8, height=200)
 
-    st.write(
-        f'<p style="font-size:20px; color:"#959EC6";">Upload an image of your food and we will tell you its nutrition facts!</p>',
-        unsafe_allow_html=True,
+st.write(
+    f'<p style="font-size:20px; color:"#959EC6";">Upload an image of your food and we will tell you its nutrition facts!</p>',
+    unsafe_allow_html=True,
     )
 
 
@@ -93,7 +93,8 @@ with st.container():
                 unsafe_allow_html=True,
             )
     with left_lottie:
-        st.empty()
+        lottie2 = load_lottieurl('https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json')
+        st_lottie(lottie2, speed = 0.5, height=150)
 
 # Image Container
 with st.container():
