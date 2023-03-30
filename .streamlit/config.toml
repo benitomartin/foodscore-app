@@ -7,7 +7,7 @@ primaryColor = '#FF8C02' # Bright Orange
 backgroundColor = '#FFFFFF' # White
 
 # Second background color for added contrast
-secondaryBackgroundColor = '#95F5DE' # Dark Blue
+secondaryBackgroundColor = '#959EC6' #
 
 textColor = '#333E36' # Dark
 

@@ -7,36 +7,49 @@ from streamlit_cropper import st_cropper
 import io
 
 
+### Function for the nutrition dataframe to implement and change units
+def format_food_table(table):
+    new_table = {}
+    for title, col in table.items():
+        new_col = {}
+        new_table[title] = new_col
+        for row_name, value in col.items():
+            new_row_name = str(int(row_name) + 1)
+            if isinstance(value, float):
+                if title in ["protein", "fat", "carbohydrates"]:
+                    new_col[new_row_name] = str(value) + " g"
+                else:
+                    new_col[new_row_name] = str(round(value * 1000)) + " mg"
+            else:
+                new_col[new_row_name] = value
+    return new_table
+
+
 st.set_page_config(page_title="FoodScore", page_icon=":food:", layout="wide")
-
-
-subset = ["protein", "calcium", "fat", "carbohydrates", "vitamins"]
-# Funciton for styling the Nutrition Dataset
-def make_pretty(styler):
-
-                styler.highlight_max(axis=0, color="#EA5432", subset=subset)
-                styler.highlight_min(axis=0, color="#72C01F", subset=subset)
-                styler.format(formatter="{:.2f}", subset=subset)
-
-
-                return styler
-
 
 ### DEFINE PAGE CONTAINERS
 
 # Header
 with st.container():
+    st.markdown(
+        """<style>
+            @import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
 
-    st.markdown("""<style>
                 .big-font {
                     font-size:100px !important;
-                    color: 2B5DC1
+                    color: 2B5DC1;
+                    font-family:'Monoton';
+                    text-align: center
                     }
                     </style>""",
-                    unsafe_allow_html=True)
+        unsafe_allow_html=True,
+    )
 
-    st.markdown('<p class="big-font">FoodScore !!</p>', unsafe_allow_html=True)
-
+    st.markdown('<p class="big-font">FoodScore</p>', unsafe_allow_html=True)
+    st.write(
+        f'<p style="font-size:35px; color:"#959EC6";">Do you really know what you are eating?</p>',
+        unsafe_allow_html=True,
+    )
 
 
 # Lottie Animation
@@ -46,115 +59,90 @@ def load_lottieurl(url):
         return None
     return r.json()
 
+
 with st.container():
     left_lottie, right_lottie = st.columns(2)
     with left_lottie:
-        st.header('Welcome to FoodScore!! 🍕')
-        st.subheader('Do you really know what you are eating?')
+        # st.header("FoodScore")
 
-        lottie1 = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_tll0j4bb.json')
-        st_lottie(lottie1, speed = 0.8, height=250)
-
+        lottie1 = load_lottieurl(
+            "https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json"
+        )
+        st_lottie(lottie1, speed=0.8, height=250)
 
     with right_lottie:
-        lottie2 = load_lottieurl('https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json')
-        st_lottie(lottie2, speed = 0.8, height=400)
+        lottie2 = load_lottieurl(
+            "https://assets5.lottiefiles.com/packages/lf20_tll0j4bb.json"
+        )
+        st_lottie(lottie2, speed=0.8, height=300)
+
+    st.write(
+        f'<p style="font-size:20px; color:"#959EC6";">Upload an image of your food and we will tell you its nutrition facts!</p>',
+        unsafe_allow_html=True,
+    )
 
 
-# Subheader
 with st.container():
-    st.subheader('Upload an image of your food and we will tell you its nutrition facts!!')
-
-
-# Photo Upload
-with st.container():
-    uploaded_file = st.file_uploader("Upload your Food!! 🍣🍚🍱",
-                                    type=["png","jpg","bmp","jpeg"])
-
-    if uploaded_file:
-       # Hide filename on UI
-        st.markdown('''<style>
-                    .uploadedFile {display: none} <style>''',
-                    unsafe_allow_html=True)
-
+    uploading, left_lottie = st.columns(2)
+    with uploading:
+        uploaded_file = st.file_uploader(" ", type=["png", "jpg", "bmp", "jpeg"])
+        if uploaded_file:
+            st.markdown(
+                """<style>
+                .uploadedFile {display: none} <style>""",
+                unsafe_allow_html=True,
+            )
+    with left_lottie:
+        st.empty()
 
 # Image Container
 with st.container():
     if uploaded_file is not None:
-
-        #col1, col2 = st.columns([1,1])
-
         url = "https://fastfoodscore-j5kdnfjkoa-ew.a.run.app/upload_image"
 
         # url = "http://localhost:8000/upload_image"
 
-        #dict_food = requests.post(url,files={'img':open('test_fotos/1.jpg','rb')}).json()
-        #dict_food = requests.post(url,files={'img':uploaded_file.getvalue()}).json()
+        # dict_food = requests.post(url,files={'img':open('test_fotos/1.jpg','rb')}).json()
+        # dict_food = requests.post(url,files={'img':uploaded_file.getvalue()}).json()
 
+        img = Image.open(uploaded_file)
 
-        realtime_update = st.checkbox(label="Update in Real Time", value=True)
-        aspect_choice = st.radio(label="Aspect Ratio", options=["1:1", "16:9", "4:3", "2:3", "Free"])
-        aspect_dict = {
-            "1:1": (1, 1),
-             "16:9": (16, 9),
-             "4:3": (4, 3),
-             "2:3": (2, 3),
-             "Free": None
-         }
+        col1, col2, col3 = st.columns([5, 1, 4])
 
-        aspect_ratio = aspect_dict[aspect_choice]
-
-        if uploaded_file:
-            img = Image.open(uploaded_file)
-
-            # fig = px.imshow(img)
-            # fig.update_layout(width=500, height=600, margin=dict(l=1, r=1, b=1, t=1))
-            # fig.update_layout(hovermode=False)
-            # fig.update_xaxes(showticklabels=False)
-            # fig.update_yaxes(showticklabels=False)
-            # st.plotly_chart(img, use_container_width=True)
-
-            if not realtime_update:
-
-                st.write("Double click to save crop")
-
+        with col1:
             # Get a cropped image from the frontend
-            cropped_img = st_cropper(img, realtime_update=realtime_update,
-                                            aspect_ratio=aspect_ratio)
+            cropped_img = st_cropper(img, aspect_ratio=None)
 
-
+        with col3:
             # Manipulate cropped image at will
-            st.write("Preview")
-            _ = cropped_img.thumbnail((600,600))
-            st.image(cropped_img)
+            st.write("Cropped Image")
+            # _ = cropped_img.thumbnail((600, 600))
+            col3.image(cropped_img, width=400)
 
+        col1, col2, col3 = st.columns([2, 0.1, 5])
 
+        with col1:
+            if st.button("Show Nutritions"):
+                buffer = io.BytesIO()
 
+                cropped_img.save(buffer, format="jpeg")
 
-        if st.button('Crop'):
+                # dict_food = requests.post(url,data=buffer.getvalue()).json()
 
-            buffer = io.BytesIO()
+                dict_food = requests.post(url, files={"img": buffer.getvalue()}).json()
 
-            cropped_img.save(buffer, format="jpeg")
+                with col3:
+                    st.write(
+                        f'<p style="font-size:35px; color:"#959EC6";">Is it {dict_food["name"]["0"]}?</p>',
+                        unsafe_allow_html=True,
+                    )
 
-            # dict_food = requests.post(url,data=buffer.getvalue()).json()
-
-            dict_food = requests.post(url,files={'img':buffer.getvalue()}).json()
-
-
-            st.write(f"Is it {dict_food['name']['0']}?")
-
-            st.write(f"Or is it {dict_food['name']['1']}?")
-
-            st.write('<p style="font-size:26px; color:red;">Here you can find your nutrition Data</p>', unsafe_allow_html=True)
-
-            st.dataframe(dict_food)
-
-
-            # Show a Table with the nutrition facts. To be fine tuned
-            # st.write('<p style="font-size:26px; color:white;">Here you can find your nutrition Data (min/max)</p>', unsafe_allow_html=True)
-            # st.dataframe(nutr_df.style.pipe(make_pretty), use_container_width=True)
-
+                    st.write(
+                        '<p style="font-size:20px; color:"#959EC6";">Here you can find the nutrition data for our top predictions per 100g</p>',
+                        unsafe_allow_html=True,
+                    )
+                    dict_food = format_food_table(dict_food)
+                    st.dataframe(dict_food)
 
 
 # Remove the Menu Button and Streamlit Icon
