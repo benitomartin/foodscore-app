@@ -47,7 +47,7 @@ with st.container():
 
     st.markdown('<p class="big-font">FoodScore</p>', unsafe_allow_html=True)
     st.write(
-        f'<p style="text-align: center;font-size:35px; color:"#959EC6";">Do you really know what eat?</p>',
+        f'<p style="text-align: center;font-size:35px; color:"#959EC6";">Do you really know what you eat?</p>',
         unsafe_allow_html=True,
     )
 
