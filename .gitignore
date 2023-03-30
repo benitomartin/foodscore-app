@@ -6,3 +6,4 @@
 .env
 *.pyc
 model_weights/
+test_fotos/
