@@ -1,13 +1,13 @@
 [theme] # This line is necessary
 
 # Defines the accent color
-primaryColor = '#FF8C02' # Bright Orange
+primaryColor = '#3bcfe3' # Dark Grey
 
 # Background color of the main content area
 backgroundColor = '#FFFFFF' # White
 
 # Second background color for added contrast
-secondaryBackgroundColor = '#95F5DE' # Dark Blue
+secondaryBackgroundColor = '#3bcfe3' # Dark Blue
 
 textColor = '#333E36' # Dark
 
