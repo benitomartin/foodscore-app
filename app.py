@@ -79,7 +79,7 @@ with st.container():
         lottie1 = load_lottieurl('https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json')
         st_lottie(lottie1, speed = 0.5, height=100)
     with uploading:
-        uploaded_file = st.file_uploader(" ", type=["jpg"])
+        uploaded_file = st.file_uploader(" ", type=["jpg", "jpeg", "png"])
         if uploaded_file:
             st.markdown(
                 """<style>
