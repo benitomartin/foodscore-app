@@ -47,7 +47,7 @@ with st.container():
 
     st.markdown('<p class="big-font">FoodScore</p>', unsafe_allow_html=True)
     st.write(
-        f'<p style="text-align: center;font-size:35px; color:"#959EC6";">Do you really know what you are eating?</p>',
+        f'<p style="text-align: center;font-size:35px; color:"#959EC6";">Do you really know what eat?</p>',
         unsafe_allow_html=True,
     )
 
@@ -61,50 +61,39 @@ def load_lottieurl(url):
 
 
 with st.container():
-    #left_lottie, right_lottie = st.columns(2)
-    #with left_lottie:
-        # st.header("FoodScore")
 
-    #    lottie1 = load_lottieurl(
-    #        "https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json"
-    #    )
-    #    st_lottie(lottie1, speed=0.8, height=250)
-
-    #with right_lottie:
     lottie2 = load_lottieurl(
         "https://assets5.lottiefiles.com/packages/lf20_tll0j4bb.json"
     )
     st_lottie(lottie2, speed=0.8, height=200)
 
 st.write(
-    f'<p style="font-size:20px; color:"#959EC6";">Upload an image of your food and we will tell you its nutrition facts!</p>',
+    f'<p style="text-align: center;font-size:20px; color:"#959EC6";">Upload an image of your food and we will tell you its nutrition facts!</p>',
     unsafe_allow_html=True,
     )
 
 
 with st.container():
-    uploading, left_lottie = st.columns(2)
+    left_lottie, uploading, right_lottie = st.columns([3, 5, 3])
+    with left_lottie:
+        lottie1 = load_lottieurl('https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json')
+        st_lottie(lottie1, speed = 0.5, height=100)
     with uploading:
-        uploaded_file = st.file_uploader(" ", type=["png", "jpg", "bmp", "jpeg"])
+        uploaded_file = st.file_uploader(" ", type=["jpg"])
         if uploaded_file:
             st.markdown(
                 """<style>
                 .uploadedFile {display: none} <style>""",
                 unsafe_allow_html=True,
             )
-    with left_lottie:
-        lottie2 = load_lottieurl('https://assets5.lottiefiles.com/temp/lf20_nXwOJj.json')
-        st_lottie(lottie2, speed = 0.5, height=150)
+    with right_lottie:
+        lottie2 = load_lottieurl('https://assets9.lottiefiles.com/packages/lf20_yBiWrEStmy.json')
+        st_lottie(lottie2, speed = 0.5, height=100)
 
 # Image Container
 with st.container():
     if uploaded_file is not None:
         url = "https://fastfoodscore-j5kdnfjkoa-ew.a.run.app/upload_image"
-
-        # url = "http://localhost:8000/upload_image"
-
-        # dict_food = requests.post(url,files={'img':open('test_fotos/1.jpg','rb')}).json()
-        # dict_food = requests.post(url,files={'img':uploaded_file.getvalue()}).json()
 
         img = Image.open(uploaded_file)
 
@@ -112,7 +101,7 @@ with st.container():
 
         with col1:
             # Get a cropped image from the frontend
-            cropped_img = st_cropper(img, aspect_ratio=None)
+            cropped_img = st_cropper(img, aspect_ratio=None, box_color='white')
 
         with col3:
             # Manipulate cropped image at will
@@ -123,27 +112,29 @@ with st.container():
         col1, col2, col3 = st.columns([2, 0.1, 5])
 
         with col1:
-            if st.button("Show Nutritions"):
-                buffer = io.BytesIO()
 
-                cropped_img.save(buffer, format="jpeg")
+            with st.spinner('Nutritions are coming..'):
+                if st.button("Show Nutritions"):
+                    buffer = io.BytesIO()
 
-                # dict_food = requests.post(url,data=buffer.getvalue()).json()
+                    cropped_img.save(buffer, format="jpeg")
 
-                dict_food = requests.post(url, files={"img": buffer.getvalue()}).json()
+                    # dict_food = requests.post(url,data=buffer.getvalue()).json()
 
-                with col3:
-                    st.write(
-                        f'<p style="font-size:35px; color:"#959EC6";">Is it {dict_food["name"]["0"]}?</p>',
-                        unsafe_allow_html=True,
-                    )
+                    dict_food = requests.post(url, files={"img": buffer.getvalue()}).json()
 
-                    st.write(
-                        '<p style="font-size:20px; color:"#959EC6";">Here you can find the nutrition data for our top predictions per 100g</p>',
-                        unsafe_allow_html=True,
-                    )
-                    dict_food = format_food_table(dict_food)
-                    st.dataframe(dict_food)
+                    with col3:
+                        st.write(
+                            f'<p style="font-size:35px; color:"#959EC6";">Is it {dict_food["name"]["0"]}?</p>',
+                            unsafe_allow_html=True,
+                        )
+
+                        st.write(
+                            '<p style="font-size:20px; color:"#959EC6";">Here you can find the nutrition data for our top predictions per 100g</p>',
+                            unsafe_allow_html=True,
+                        )
+                        dict_food = format_food_table(dict_food)
+                        st.dataframe(dict_food)
 
 
 # Remove the Menu Button and Streamlit Icon
