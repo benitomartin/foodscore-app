@@ -4,7 +4,7 @@ This repository is the Website of the [Data Science Project](https://github.com/
 
 You can have a look at the Website, but unfortunately the prediction can only be done once you train the model and get your own weights and docker image, as this comes with associated costs.
 
-Therefore, it is recommended to read first that repository in order to understand how the model works and how you can get your weights and docker image.
+Therefore, it is recommended to read first that repository in order to understand how the model works and how you can get your weights.
 
 ## :thinking: **How to use the Website** 
 
