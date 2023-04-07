@@ -1,12 +1,12 @@
 # **THE WEBSITE** :clapper:
 
-This repository is the Website of the [Data Science Project](https://github.com/benitomartin/foodscore-code) developed for food recognition using deep learning.  
+This repository is the Website of the [FoodScore](https://github.com/benitomartin/foodscore-code) project developed for food recognition using deep learning.  
 
 You can have a look at the Website, but unfortunately the prediction can only be done once you train the model and get your own weights and docker image, as this comes with associated costs.
 
 Therefore, it is recommended to read first that repository in order to understand how the model works and how you can get your weights.
 
-## :thinking: **How to use the Website** 
+## :thinking: **How to use the Website?** 
 
 The [Website](https://foodscore.streamlit.app/) is very easy to use as this is important for every business solution. First, you need to upload an image that contains at least one food category of the Food100 dataset.
 
