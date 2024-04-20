@@ -4,7 +4,9 @@ This repository is the Website of the [FoodScore](https://github.com/benitomarti
 
 You can have a look at the Website, but unfortunately the prediction can only be done once you train the model and get your own weights and docker image, as this comes with associated costs.
 
-Therefore, it is recommended to read first that repository in order to understand how the model works and how you can get your weights.
+Therefore, it is recommended to read first that repository in order to understand how the model works and how you can get your weights. 
+
+Feel free to ⭐ and clone this repo 😉
 
 ## :thinking: **How to use the Website?** 
 
